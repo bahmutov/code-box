@@ -2088,7 +2088,7 @@ window.CodeBox = function (elementSelector) {
   }
 
   function centerHorizontally() {
-    this.content.height(window.innerHeight * 0.9);
+    this.content.height(window.innerHeight * 0.88);
 
     var codeElements = $(this.content).children('.code-box-lightbox-middle');
     codeElements.each(toMiddle);
@@ -2101,8 +2101,21 @@ window.CodeBox = function (elementSelector) {
 
     // http://prismjs.com/extending.html#api
     var code = this.innerText || $(this).children('code')[0].innerHTML;
-    var language = $(this).children('code').attr('language') || 'javascript';
+    var language = $(this).children('code').attr('language') || 
+      $(this).children('code').attr('lang');
+    if (!language) {
+      language = $(this).children('code').attr('class');
+      if (language) {
+        language = language.replace(/^lang-/, '');
+      }
+    }
+    if (!language) {
+      language = 'javascript';
+    }
     /*global Prism:true*/
+    if (!Prism.languages[language]) {
+      language = 'javascript';
+    }
     var highlighted = Prism.highlight(code, Prism.languages[language]);
     var codeBlock = '<pre>' + highlighted + '</pre>';
 
