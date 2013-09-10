@@ -1,0 +1,25 @@
+{
+  "name": "code-box",
+  "version": "0.0.0",
+  "homepage": "https://github.com/bahmutov/code-box",
+  "authors": [
+    "Gleb Bahmutov <gleb.bahmutov@gmail.com>"
+  ],
+  "description": "Extremely simple light box with syntax highlighting specifically for showing code",
+  "main": "code-box.js",
+  "keywords": [
+    "code",
+    "syntax",
+    "highlighting",
+    "lightbox",
+    "fullscreen"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
