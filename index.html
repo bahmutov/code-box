@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Code box test</title>
+
+  <link rel="stylesheet" href="code-box.css" />
+  <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+  <script src="code-box.js"></script>
+
+  <style type="text/css">
+  body {
+    padding: 20px 100px 20px 100px;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  pre.main {
+    position: relative;
+    padding: 20px;
+    width: 200px;
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: lightBlue;
+    border: 1px dashed black;
+
+    font-size: 1em;
+    line-height: 1.5em;
+  }
+
+  code {
+    padding: 0 0;
+    margin: 0 0;
+  }
+  </style>
+</head>
+<body>
+
+Code-box version: 0.0.0. Please click on a fullscreen icon inside each code block. You should see
+nice lightbox with syntax highlighted code.
+
+<pre class="main">
+<code language="javascript">
+var Q = require('q');
+
+function promiseToChange(opts) {
+  var originalFilename = opts.originalFilename;
+  var changedFilename = opts.changedFilename;
+  var updateIndex = opts.updateIndex;
+
+  var d = Q.defer();
+  setTimeout(function () {
+    console.log('deleted statement in', changedFilename);
+    d.resolve();
+  }, 500);
+  return d.promise;
+}
+
+function count() {
+  // todo: return number of statements in the file
+  return 0;
+}
+
+function init(opts) {
+  opts = opts || {};
+
+  return {
+    promiseToChange: promiseToChange.bind(null, opts);
+  };
+}
+
+module.exports = init;
+</code>
+</pre>
+
+another example
+
+<pre class="main"><code language="cpp">
+#include "highgui.h"
+
+int main( int argc, char** argv ) {
+  cvNamedWindow( "Example2", CV_WINDOW_AUTOSIZE );
+  CvCapture* capture = cvCreateFileCapture( argv[ 1] ); // load image by filename
+  IplImage* frame;
+  while( 1) {
+    frame = cvQueryFrame( capture );
+    if( !frame ) break;
+    cvShowImage( "Example2", frame );
+    char c = cvWaitKey( 33);
+    if( c = = 27 ) break;
+  }
+  cvReleaseCapture( &capture );
+  cvDestroyWindow( "Example2" );
+}
+</code></pre>
+
+Another example, make sure both start and end lines are visible
+
+<pre class="main"><code language="cpp">
+start;
+
+#include "opencv/cv.h"
+#include "opencv/highgui.h"
+
+#include "affineWarp.h"
+#include "iostream"
+#include "string"
+
+using namespace std;
+
+string join(string const & base, string const & path) {
+  return base;
+}
+
+void showSmoothed(IplImage * img) {
+  IplImage * smoothed = cvCreateImage(cvGetSize(img), IPL_DEPTH_8U, 3);
+  cvSmooth(img, smoothed, CV_GAUSSIAN, 3, 3);
+
+  const char * name = "smoothed";
+  cvNamedWindow(name);
+  cvShowImage(name, smoothed);
+
+  cvWaitKey(10000);
+  cvDestroyWindow(name);
+
+  cvReleaseImage(&smoothed);
+}
+
+void showImage(IplImage * img) {
+  const char * name = "Example";
+  cvNamedWindow(name, CV_WINDOW_AUTOSIZE );
+  cvShowImage(name, img );
+  // wait N ms for a key
+  cvWaitKey(10000);
+  cvDestroyWindow(name);
+}
+
+IplImage * halfImage(IplImage * img, const int filter = IPL_GAUSSIAN_5x5) {
+  assert(img->width % 2 == 0 && img->height % 2 == 0);
+  IplImage * out = cvCreateImage(cvSize(img->width / 2, img->height / 2),
+    img->depth, img->nChannels);
+  cvPyrDown(img, out, filter);
+  return out;
+}
+
+// sets red channel to zero
+void removeRed(IplImage * img) {
+  assert(img->nChannels == 3);
+  for(int row = 0; row < img->height; row++) {
+    uchar *rowStart = (uchar*)(img->imageData + row*img->widthStep);
+    for(int column = 0; column < img->width; column++) {
+      rowStart[column*3] = 0;
+    }
+  }
+}
+
+// draws red horizontal middle line
+void drawHorizon(IplImage *img) {
+  cvLine(img, cvPoint(0, img->height/2), cvPoint(img->width, img->height/2), CV_RGB(0xFF, 0, 0));
+}
+
+end;
+</code></pre>
+
+very long example, make sure start and end lines are visible
+
+<pre class="main"><code language="cpp">
+// start
+#include "opencv/cv.h"
+#include "opencv/highgui.h"
+
+#include "affineWarp.h"
+#include "iostream"
+#include "string"
+
+using namespace std;
+
+string join(string const & base, string const & path) {
+  return base;
+}
+
+void showSmoothed(IplImage * img) {
+  IplImage * smoothed = cvCreateImage(cvGetSize(img), IPL_DEPTH_8U, 3);
+  cvSmooth(img, smoothed, CV_GAUSSIAN, 3, 3);
+
+  const char * name = "smoothed";
+  cvNamedWindow(name);
+  cvShowImage(name, smoothed);
+
+  cvWaitKey(10000);
+  cvDestroyWindow(name);
+
+  cvReleaseImage(&smoothed);
+}
+
+void showImage(IplImage * img) {
+  const char * name = "Example";
+  cvNamedWindow(name, CV_WINDOW_AUTOSIZE );
+  cvShowImage(name, img );
+  // wait N ms for a key
+  cvWaitKey(10000);
+  cvDestroyWindow(name);
+}
+
+IplImage * halfImage(IplImage * img, const int filter = IPL_GAUSSIAN_5x5) {
+  assert(img->width % 2 == 0 && img->height % 2 == 0);
+  IplImage * out = cvCreateImage(cvSize(img->width / 2, img->height / 2),
+    img->depth, img->nChannels);
+  cvPyrDown(img, out, filter);
+  return out;
+}
+
+// sets red channel to zero
+void removeRed(IplImage * img) {
+  assert(img->nChannels == 3);
+  for(int row = 0; row < img->height; row++) {
+    uchar *rowStart = (uchar*)(img->imageData + row*img->widthStep);
+    for(int column = 0; column < img->width; column++) {
+      rowStart[column*3] = 0;
+    }
+  }
+}
+
+// draws red horizontal middle line
+void drawHorizon(IplImage *img) {
+  cvLine(img, cvPoint(0, img->height/2), cvPoint(img->width, img->height/2), CV_RGB(0xFF, 0, 0));
+}
+
+void experiment(const char *filename) {
+  assert(filename);
+  IplImage* img = cvLoadImage(filename);
+  IplImage* half = halfImage(img);
+
+  removeRed(half);
+  drawHorizon(half);
+
+  // showSmoothed(img);
+  showImage(half);
+
+  cvReleaseImage(&half);
+  cvReleaseImage(&img);
+}
+
+void printAffineMatrix(CvMat const * const M) {
+  assert(M);
+  assert(M->rows == 2);
+  assert(M->cols == 3);
+
+  for(int r=0; r<2; r++) {
+    cout << setprecision(3) << cvGetReal2D(M, r, 0) << ' ' << cvGetReal2D(M, r, 1) << ' ' << cvGetReal2D(M, r, 2) << endl;
+  }
+}
+
+void affineTest() {
+  // points in the static image
+  const char * staticImage = "displayImage/hall00.jpg";
+  const char * movingImage = "displayImage/hall01.jpg";
+
+  IplImage * staticImg = cvLoadImage(staticImage);
+  assert(staticImg);
+
+  IplImage * warpedImg = cvLoadImage(movingImage);
+  assert(warpedImg);
+
+  CvPoint2D32f srcTri[3] = {
+    cvPoint2D32f(24, 8),
+    cvPoint2D32f(301, 65),
+    cvPoint2D32f(397, 427)
+  };
+  CvPoint2D32f dstTri[3] = {
+    cvPoint2D32f(119, 66),
+    cvPoint2D32f(287, 69),
+    cvPoint2D32f(327, 302)
+  };
+
+  CvMat * affineWarpMatrix = cvCreateMat(2, 3, CV_32FC1);
+
+  cvGetAffineTransform(srcTri, dstTri, affineWarpMatrix);
+
+  printAffineMatrix(affineWarpMatrix);
+
+  cvWarpAffine(warpedImg, staticImg, affineWarpMatrix, CV_INTER_LINEAR);
+
+  const char * name = "warped";
+  cvNamedWindow(name, CV_WINDOW_AUTOSIZE );
+  cvShowImage(name, staticImg);
+  // wait N ms for a key
+  cvWaitKey(10000);
+  cvDestroyWindow(name);
+
+  cvReleaseImage(&staticImg);
+  cvReleaseImage(&warpedImg);
+
+  cvReleaseMat(&affineWarpMatrix);
+}
+
+string imagesFolder() {
+  return __FILE__;
+}
+
+int main( int argc, char** argv ) {
+  // experiment(argv[1]);
+  // affineTest(__BASE_FILE___);
+  cout << "base file " << __FILE__ << endl;
+
+  affineTest();
+
+  return 0;
+}
+// end
+</code></pre>
+
+<script>
+  $(function () {
+    CodeBox('pre');
+  });
+</script>
+</body>
+</html>
