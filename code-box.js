@@ -1,4 +1,4 @@
-/*! code-box - 0.0.0 built on 2013-09-10
+/*! code-box - 0.0.1 built on 2013-09-10
 author: Gleb Bahmutov <gleb.bahmutov@gmail.com>, support: @bahmutov */
 
 /*! Magnific Popup - v0.9.5 - 2013-08-21
@@ -2100,7 +2100,7 @@ window.CodeBox = function (elementSelector) {
     $(this).append(zoomin);
 
     // http://prismjs.com/extending.html#api
-    var code = this.innerText;
+    var code = this.innerText || $(this).children('code')[0].innerHTML;
     var language = $(this).children('code').attr('language') || 'javascript';
     /*global Prism:true*/
     var highlighted = Prism.highlight(code, Prism.languages[language]);
