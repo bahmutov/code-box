@@ -1,4 +1,4 @@
-/*! code-box - 0.0.0 built on 2013-09-10
+/*! code-box - 0.0.3 built on 2013-09-11
 author: Gleb Bahmutov <gleb.bahmutov@gmail.com>, support: @bahmutov */
 
 /*! Magnific Popup - v0.9.5 - 2013-08-21
@@ -2050,35 +2050,28 @@ Prism.languages.http={"request-line":{pattern:/^(POST|GET|PUT|DELETE|OPTIONS)\b\
 Prism.hooks.add("after-highlight",function(e){var t=e.element.parentNode;if(!t||!/pre/i.test(t.nodeName)||t.className.indexOf("line-numbers")===-1){return}var n=1+e.code.split("\n").length;var r;lines=new Array(n);lines=lines.join("<span></span>");r=document.createElement("span");r.className="line-numbers-rows";r.innerHTML=lines;if(t.hasAttribute("data-start")){t.style.counterReset="linenumber "+(parseInt(t.getAttribute("data-start"),10)-1)}e.element.appendChild(r)})
 ;
 ;
+/*
+  Adds buttons to code elements that open popup with same code,
+  but with syntax highlighting.
+*/
 window.CodeBox = function (elementSelector) {
   if (!jQuery || !$) {
     throw new Error('CodeBox needs jQuery!');
   }
 
-  function toMiddle() {
-    $(this).css({
-      'display' : 'inline',
-      'position' : 'absolute',
-      'left' : '50%',
-      'top' : '50%',
-      'paddingLeft': '0',
-      'paddingTop': '0'
-    }).css('marginLeft', function () {
-      return - (+$(this).width()) / 2;
-    }).css('marginTop', function () {
-      return - (+$(this).height()) / 2;
-    });
-
-    if (parseInt($(this).css('marginTop'), 10) < -window.innerHeight * 0.4) {
-      $(this).css({
+  function resetHeightIfOverflowing($el) {
+    if (parseInt($el.css('marginTop'), 10) < -window.innerHeight * 0.4) {
+      $el.css({
         'paddingTop': '0',
         'marginTop': '0',
         'top': '0'
       });
     }
+  }
 
-    if (parseInt($(this).css('marginLeft'), 10) < -window.innerWidth * 0.4) {
-      $(this).css({
+  function resetWidthIfOverflowing($el) {
+    if (parseInt($el.css('marginLeft'), 10) < -window.innerWidth * 0.4) {
+      $el.css({
         'paddingLeft': '20px',
         'paddingRight': '20px',
         'marginLeft': '0',
@@ -2087,31 +2080,62 @@ window.CodeBox = function (elementSelector) {
     }
   }
 
+  function toMiddle() {
+    var $el = $(this);
+    $el.css({
+      'display' : 'inline',
+      'position' : 'absolute',
+      'left' : '50%',
+      'top' : '50%',
+      'paddingLeft': '0',
+      'paddingTop': '0'
+    }).css('marginLeft', function () {
+      return - (+$el.width()) / 2;
+    }).css('marginTop', function () {
+      return - (+$el.height()) / 2;
+    });
+
+    resetHeightIfOverflowing($el);
+    resetWidthIfOverflowing($el);
+  }
+
   function centerHorizontally() {
-    this.content.height(window.innerHeight * 0.9);
+    this.content.height(window.innerHeight * 0.88);
 
     var codeElements = $(this.content).children('.code-box-lightbox-middle');
     codeElements.each(toMiddle);
   }
 
-  $(elementSelector).each(function () {
-    var zoomin = $('<span class="code-box-expand-icon"></span>');
-    zoomin.attr('title', 'See code fullscreen');
-    $(this).append(zoomin);
+  function getCode(element) {
+    // usually code is inside <pre><code>...</code></pre>
+    var code = element.innerText || 
+      $(element).children('code')[0].innerHTML;
+    return code;
+  }
 
-    // http://prismjs.com/extending.html#api
-    var code = this.innerText;
-    var language = $(this).children('code').attr('language') || 'javascript';
-    /*global Prism:true*/
-    var highlighted = Prism.highlight(code, Prism.languages[language]);
-    var codeBlock = '<pre>' + highlighted + '</pre>';
+  function getLanguage($el) {
+    var language = $el.children('code').attr('language') || 
+      $el.children('code').attr('lang');
+    if (!language) {
+      language = $el.children('code').attr('class');
+      if (language) {
+        language = language.replace(/^lang-/, '');
+      }
+    }
+    if (!language) {
+      language = 'javascript';
+    }
+    return language;
+  }
 
+  // codeBlock should be formatted <pre>....</pre> string
+  function makeCodeBoxPopup($button, codeBlock) {
     // see magnific-popup docs
     // http://dimsemenov.com/plugins/magnific-popup/documentation.html
 
     var codeInTheMiddle = '<div class="code-box-lightbox-middle">' + codeBlock.toString() + '</div>';
     var popupCode = '<div class="code-box-lightbox-code">' + codeInTheMiddle + '</div>';
-    zoomin.magnificPopup({
+    $button.magnificPopup({
       items: {
         src: popupCode,
         type: 'inline',
@@ -2123,5 +2147,44 @@ window.CodeBox = function (elementSelector) {
         open: centerHorizontally
       }
     });
-  });
+  }
+
+  // adds small icon on top of $el to open code box
+  function makeButton($el) {
+    var zoomin = $('<span class="code-box-expand-icon"></span>');
+    zoomin.attr('title', 'See code fullscreen');
+    $el.append(zoomin);
+    return  zoomin;
+  }
+
+  function makeCodeBox() {
+    var $el = $(this);
+    var zoomin = makeButton($el);
+
+    var code = getCode(this);
+    var language = getLanguage($el);
+    var highlighted = code;
+
+    /*global Prism:true*/
+    if (!Prism.languages[language]) {
+      language = 'javascript';
+    }
+    if (Prism.languages[language]) {
+      // http://prismjs.com/extending.html#api
+      highlighted = Prism.highlight(code, Prism.languages[language]);
+    }
+
+    var codeBlock = '<pre>' + highlighted + '</pre>';
+    makeCodeBoxPopup(zoomin, codeBlock);
+  }
+
+  function makeMultipleCodeBoxes(elementSelector) {
+    if (!elementSelector) {
+      throw new Error('missing code box element selector, for example "pre"');
+    }
+
+    $(elementSelector).each(makeCodeBox);  
+  }
+
+  makeMultipleCodeBoxes(elementSelector);
 };

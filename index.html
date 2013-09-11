@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Code box test</title>
+  <title>Code box version: 0.0.3</title>
 
   <link rel="stylesheet" href="code-box.css" />
   <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
@@ -18,11 +18,10 @@
   pre.main {
     position: relative;
     padding: 20px;
-    width: 200px;
+    width: 600px;
     height: 300px;
     overflow-x: hidden;
     overflow-y: auto;
-    background-color: lightBlue;
     border: 1px dashed black;
 
     font-size: 1em;
@@ -37,9 +36,23 @@
 </head>
 <body>
 
-Code-box version: 0.0.0. Please click on a fullscreen icon inside each code block. You should see
+<h1>Code-box version: 0.0.3</h1> 
+
+Please click on a fullscreen icon inside each code block. You should see
 nice lightbox with syntax highlighted code.
 
+<p>
+Available through <a href="http://bower.io/">bower</a> as <strong>code-box</strong> 
+under <strong>MIT</strong> license.
+
+<p>
+2013 &copy; Gleb Bahmutov 
+<a href="https://twitter.com/bahmutov" class="twitter-follow-button" data-show-count="false">Follow @bahmutov</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+<h3>Examples</h3>
+
+<em>JavaScript code example</em>
 <pre class="main">
 <code language="javascript">
 var Q = require('q');
@@ -74,7 +87,7 @@ module.exports = init;
 </code>
 </pre>
 
-another example
+<em>C++ example, notice that small code blocks are centered</em>
 
 <pre class="main"><code language="cpp">
 #include "highgui.h"
@@ -95,10 +108,10 @@ int main( int argc, char** argv ) {
 }
 </code></pre>
 
-Another example, make sure both start and end lines are visible
+<em>Longer C++ example</em>
 
 <pre class="main"><code language="cpp">
-start;
+// first line
 
 #include "opencv/cv.h"
 #include "opencv/highgui.h"
@@ -160,13 +173,13 @@ void drawHorizon(IplImage *img) {
   cvLine(img, cvPoint(0, img->height/2), cvPoint(img->width, img->height/2), CV_RGB(0xFF, 0, 0));
 }
 
-end;
+// last line
 </code></pre>
 
-very long example, make sure start and end lines are visible
+<em>very long C++ example</em>
 
 <pre class="main"><code language="cpp">
-// start
+// first line
 #include "opencv/cv.h"
 #include "opencv/highgui.h"
 
@@ -308,8 +321,15 @@ int main( int argc, char** argv ) {
 
   return 0;
 }
-// end
+// last line
 </code></pre>
+
+<em>No language specified</em>
+<pre class="main">
+<code>
+  // this is some code without set language
+</code>
+</pre>
 
 <script>
   $(function () {
