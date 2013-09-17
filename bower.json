@@ -1,6 +1,6 @@
 {
   "name": "code-box",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/bahmutov/code-box",
   "authors": [
     "Gleb Bahmutov <gleb.bahmutov@gmail.com>"
@@ -21,5 +21,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "sticky-right-top-icon": "0.0.2",
+    "normalize-css": "~2.1.3"
+  }
 }

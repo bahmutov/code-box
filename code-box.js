@@ -1,4 +1,4 @@
-/*! code-box - 0.0.3 built on 2013-09-11
+/*! code-box - 0.0.4 built on 2013-09-17
 author: Gleb Bahmutov <gleb.bahmutov@gmail.com>, support: @bahmutov */
 
 /*! Magnific Popup - v0.9.5 - 2013-08-21
@@ -2050,6 +2050,37 @@ Prism.languages.http={"request-line":{pattern:/^(POST|GET|PUT|DELETE|OPTIONS)\b\
 Prism.hooks.add("after-highlight",function(e){var t=e.element.parentNode;if(!t||!/pre/i.test(t.nodeName)||t.className.indexOf("line-numbers")===-1){return}var n=1+e.code.split("\n").length;var r;lines=new Array(n);lines=lines.join("<span></span>");r=document.createElement("span");r.className="line-numbers-rows";r.innerHTML=lines;if(t.hasAttribute("data-start")){t.style.counterReset="linenumber "+(parseInt(t.getAttribute("data-start"),10)-1)}e.element.appendChild(r)})
 ;
 ;
+/*! sticky-right-top-icon - 0.0.2 built on 2013-09-17
+author: Gleb Bahmutov <gleb.bahmutov@gmail.com>, support: @bahmutov */
+
+/*jshint unused: false*/
+
+/**
+  Adds and 'icon' to the right top corner of the given element.
+  The icon is sticky, even if the element has scrollable content.
+
+  @example
+
+    var $icon = addTopRightIcon($('.scroll-view'));
+
+    // customize $icon as desired, for example by adding class
+    // or modifying CSS
+    $icon.addClass('icon');
+    $icon.css('right', '18px');
+*/
+function addTopRightIcon($el) {
+  var $wrapper = $('<div class="top-right-wrapper"></div>');
+  $wrapper.width($el.width());
+  $wrapper.height($el.height());
+  $el.width('auto');
+  $el.height('inherit');
+  $el.wrap($wrapper);
+
+  var $icon = $('<span class="top-right-icon"></span>');
+  $el.before($icon);
+
+  return $icon;
+};
 /*
   Adds buttons to code elements that open popup with same code,
   but with syntax highlighting.
@@ -2108,13 +2139,13 @@ window.CodeBox = function (elementSelector) {
 
   function getCode(element) {
     // usually code is inside <pre><code>...</code></pre>
-    var code = element.innerText || 
+    var code = element.innerText ||
       $(element).children('code')[0].innerHTML;
     return code;
   }
 
   function getLanguage($el) {
-    var language = $el.children('code').attr('language') || 
+    var language = $el.children('code').attr('language') ||
       $el.children('code').attr('lang');
     if (!language) {
       language = $el.children('code').attr('class');
@@ -2136,12 +2167,11 @@ window.CodeBox = function (elementSelector) {
     var codeInTheMiddle = '<div class="code-box-lightbox-middle">' + codeBlock.toString() + '</div>';
     var popupCode = '<div class="code-box-lightbox-code">' + codeInTheMiddle + '</div>';
     $button.magnificPopup({
+      closeBtnInside: false,
+      midClick: true,
       items: {
         src: popupCode,
         type: 'inline',
-        midClick: true,
-        closeBtnInside: true
-
       },
       callbacks: {
         open: centerHorizontally
@@ -2150,16 +2180,22 @@ window.CodeBox = function (elementSelector) {
   }
 
   // adds small icon on top of $el to open code box
+  /*
   function makeButton($el) {
     var zoomin = $('<span class="code-box-expand-icon"></span>');
     zoomin.attr('title', 'See code fullscreen');
     $el.append(zoomin);
     return  zoomin;
   }
+  */
 
   function makeCodeBox() {
     var $el = $(this);
-    var zoomin = makeButton($el);
+    /*global addTopRightIcon:true*/
+    var zoomin = addTopRightIcon($el);
+    zoomin.addClass('code-box-expand-icon');
+    zoomin.attr('title', 'See code fullscreen');
+    // var zoomin = makeButton($el);
 
     var code = getCode(this);
     var language = getLanguage($el);
@@ -2183,7 +2219,7 @@ window.CodeBox = function (elementSelector) {
       throw new Error('missing code box element selector, for example "pre"');
     }
 
-    $(elementSelector).each(makeCodeBox);  
+    $(elementSelector).each(makeCodeBox);
   }
 
   makeMultipleCodeBoxes(elementSelector);

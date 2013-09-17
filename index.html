@@ -2,8 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Code box version: 0.0.3</title>
+  <title>Code box version: 0.0.4</title>
 
+  <link rel="stylesheet" href="normalize.css" />
   <link rel="stylesheet" href="code-box.css" />
   <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
   <script src="code-box.js"></script>
@@ -15,9 +16,14 @@
     line-height: 20px;
   }
 
+  pre {
+    margin: 0;
+  }
+
   pre.main {
     position: relative;
     padding: 20px;
+    margin: 0;
     width: 600px;
     height: 300px;
     overflow-x: hidden;
@@ -36,25 +42,25 @@
 </head>
 <body>
 
-<h1>Code-box version: 0.0.3</h1> 
+<h1>Code-box version: 0.0.4</h1>
 
 Please click on a fullscreen icon inside each code block. You should see
 nice lightbox with syntax highlighted code.
 
 <p>
-Available through <a href="http://bower.io/">bower</a> as <strong>code-box</strong> 
-under <strong>MIT</strong> license.
+Available through <a href="http://bower.io/">bower</a> as <strong>code-box</strong> under <strong>MIT</strong> license. Developed at <a href="https://bitbucket.org/bahmutov/code-box">bitbucket</a>, distributed through <a href="https://github.com/bahmutov/code-box">github</a>.
 
 <p>
-2013 &copy; Gleb Bahmutov 
+2013 &copy; Gleb Bahmutov
 <a href="https://twitter.com/bahmutov" class="twitter-follow-button" data-show-count="false">Follow @bahmutov</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+<a href="https://coderwall.com/bahmutov"><img alt="Endorse bahmutov on Coderwall" src="https://api.coderwall.com/bahmutov/endorsecount.png" /></a>
 
 <h3>Examples</h3>
 
 <em>JavaScript code example</em>
-<pre class="main">
-<code language="javascript">
+<pre class="main"><code language="javascript">
 var Q = require('q');
 
 function promiseToChange(opts) {
@@ -110,8 +116,8 @@ int main( int argc, char** argv ) {
 
 <em>Longer C++ example</em>
 
-<pre class="main"><code language="cpp">
-// first line
+<pre class="main">
+<code language="cpp">// first line
 
 #include "opencv/cv.h"
 #include "opencv/highgui.h"
@@ -178,8 +184,7 @@ void drawHorizon(IplImage *img) {
 
 <em>very long C++ example</em>
 
-<pre class="main"><code language="cpp">
-// first line
+<pre class="main"><code language="cpp">// first line
 #include "opencv/cv.h"
 #include "opencv/highgui.h"
 

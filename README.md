@@ -2,6 +2,13 @@
 
 Extremely simple light box with syntax highlighting specifically for showing code
 
+Developed on [bitbucket](https://bitbucket.org/bahmutov/code-box),
+hosted on [github](https://github.com/bahmutov/code-box), available on *bower* under **code-box**.
+
+[![endorse](https://api.coderwall.com/bahmutov/endorsecount.png)](https://coderwall.com/bahmutov)
+
+[![codeship status](https://www.codeship.io/projects/05459600-fed1-0130-26c1-6af3696257f1/status)](https://www.codeship.io/projects/05459600-fed1-0130-26c1-6af3696257f1/status)
+
 ## Usage
 
 * include jQuery
